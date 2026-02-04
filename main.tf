@@ -12,15 +12,19 @@ provider "github" {
   owner = "command-line-team2-UA5309"
 }
 
-resource "github_repository" "terraform" {
-  name                   = "TerraformGitHub"
+resource "github_repository" "created_repository" {
+  for_each = var.repository_names
+
+  name                   = each.value
   visibility             = "public"
   auto_init              = true
   delete_branch_on_merge = true
 }
 
 resource "github_branch_protection" "name" {
-  repository_id  = github_repository.terraform.node_id
+  for_each = var.repository_names
+
+  repository_id  = github_repository.created_repository[each.value].node_id
   pattern        = "main"
   enforce_admins = true
 
