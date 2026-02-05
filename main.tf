@@ -3,8 +3,13 @@ resource "github_repository" "command-line-team_repository" {
 
   name                   = each.value
   visibility             = "public"
-  auto_init              = true
   delete_branch_on_merge = true
+
+  template {
+    owner                = "command-line-team2-UA5309"
+    repository           = "template"
+    include_all_branches = false
+  }
 }
 
 resource "github_branch_protection" "command-line-team_repository_branch_protection_rules" {
@@ -17,5 +22,10 @@ resource "github_branch_protection" "command-line-team_repository_branch_protect
   required_pull_request_reviews {
     dismiss_stale_reviews           = true
     required_approving_review_count = 2
+  }
+
+  required_status_checks {
+    strict   = true
+    contexts = ["Markdown lint"]
   }
 }
