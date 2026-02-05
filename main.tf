@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    github = {
-      source  = "integrations/github"
-      version = "~> 6.0"
-    }
-  }
-}
-
-provider "github" {
-  token = var.github_token
-  owner = "command-line-team2-UA5309"
-}
-
 resource "github_repository" "created_repository" {
   for_each = var.repository_names
 
