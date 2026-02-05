@@ -1,4 +1,4 @@
-resource "github_repository" "created_repository" {
+resource "github_repository" "command-line-team_repository" {
   for_each = var.repository_names
 
   name                   = each.value
@@ -7,10 +7,10 @@ resource "github_repository" "created_repository" {
   delete_branch_on_merge = true
 }
 
-resource "github_branch_protection" "name" {
+resource "github_branch_protection" "command-line-team_repository_branch_protection_rules" {
   for_each = var.repository_names
 
-  repository_id  = github_repository.created_repository[each.value].node_id
+  repository_id  = github_repository.command-line-team_repository[each.value].node_id
   pattern        = "main"
   enforce_admins = true
 
