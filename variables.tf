@@ -8,5 +8,5 @@ variable "github_token" {
 variable "repository_names" {
   description = "List of names for GitHub repositories"
   type        = set(string)
-  default     = ["TerraformAWS", "AnsiblePlaybooks"]
+  default     = ["TerraformAWS", "AnsiblePlaybooks", "Django_Backend"]
 }
