@@ -1,4 +1,4 @@
-resource "github_repository" "command-line-team_repository" {
+resource "github_repository" "cli_team" {
   for_each = var.repository_names
 
   name                   = each.value
@@ -10,13 +10,17 @@ resource "github_repository" "command-line-team_repository" {
     repository           = "template"
     include_all_branches = false
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
-resource "github_branch_protection" "command-line-team_repository_branch_protection_rules" {
+resource "github_branch_protection_v3" "main" {
   for_each = var.repository_names
 
-  repository_id  = github_repository.command-line-team_repository[each.value].node_id
-  pattern        = "main"
+  repository     = github_repository.cli_team[each.value].name
+  branch         = "main"
   enforce_admins = true
 
   required_pull_request_reviews {
@@ -25,7 +29,12 @@ resource "github_branch_protection" "command-line-team_repository_branch_protect
   }
 
   required_status_checks {
-    strict   = true
-    contexts = ["Markdown lint"]
+    strict = true
+    checks = ["Markdown lint:15368"]
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
+
