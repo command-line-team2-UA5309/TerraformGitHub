@@ -1,7 +1,7 @@
 resource "github_repository" "cli_team" {
-  for_each = var.repository_names
+  for_each = var.repositories
 
-  name                   = each.value
+  name                   = each.key
   visibility             = "public"
   delete_branch_on_merge = true
 
@@ -17,9 +17,9 @@ resource "github_repository" "cli_team" {
 }
 
 resource "github_branch_protection_v3" "main" {
-  for_each = var.repository_names
+  for_each = var.repositories
 
-  repository     = github_repository.cli_team[each.value].name
+  repository     = github_repository.cli_team[each.key].name
   branch         = "main"
   enforce_admins = true
 
@@ -30,7 +30,7 @@ resource "github_branch_protection_v3" "main" {
 
   required_status_checks {
     strict = true
-    checks = ["Markdown lint:15368"]
+    checks = each.value
   }
 
   lifecycle {
