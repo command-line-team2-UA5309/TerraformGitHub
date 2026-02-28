@@ -9,6 +9,9 @@ To do this, either:
 - define your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables
 - or run `aws configure`
 
+> [!NOTE]
+> The GitHub token you are using must have the `repo` and `read:org` scopes.
+
 ## How to use
 
 In the repo directory run following commands:

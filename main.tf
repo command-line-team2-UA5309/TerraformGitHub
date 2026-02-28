@@ -16,11 +16,11 @@ resource "github_repository" "cli_team" {
   }
 }
 
-resource "github_branch_protection_v3" "main" {
+resource "github_branch_protection" "main" {
   for_each = var.repositories
 
-  repository     = github_repository.cli_team[each.key].name
-  branch         = "main"
+  repository_id  = github_repository.cli_team[each.key].id
+  pattern        = "main"
   enforce_admins = true
 
   required_pull_request_reviews {
@@ -29,12 +29,11 @@ resource "github_branch_protection_v3" "main" {
   }
 
   required_status_checks {
-    strict = true
-    checks = each.value
+    strict   = true
+    contexts = each.value
   }
 
   lifecycle {
     prevent_destroy = true
   }
 }
-
