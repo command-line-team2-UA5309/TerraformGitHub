@@ -1,5 +1,14 @@
 # TerraformGitHub
 
+> [!IMPORTANT]  
+> Since the state is now stored in AWS S3, you need to set up your AWS credentials
+> before running `terraform` commands.
+
+To do this, either:
+
+- define your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables
+- or run `aws configure`
+
 ## How to use
 
 In the repo directory run following commands:

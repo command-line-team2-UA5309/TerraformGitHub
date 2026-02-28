@@ -1,7 +1,7 @@
-resource "github_repository" "command-line-team_repository" {
-  for_each = var.repository_names
+resource "github_repository" "cli_team" {
+  for_each = var.repositories
 
-  name                   = each.value
+  name                   = each.key
   visibility             = "public"
   delete_branch_on_merge = true
 
@@ -10,22 +10,31 @@ resource "github_repository" "command-line-team_repository" {
     repository           = "template"
     include_all_branches = false
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
-resource "github_branch_protection" "command-line-team_repository_branch_protection_rules" {
-  for_each = var.repository_names
+resource "github_branch_protection_v3" "main" {
+  for_each = var.repositories
 
-  repository_id  = github_repository.command-line-team_repository[each.value].node_id
-  pattern        = "main"
+  repository     = github_repository.cli_team[each.key].name
+  branch         = "main"
   enforce_admins = true
 
   required_pull_request_reviews {
     dismiss_stale_reviews           = true
-    required_approving_review_count = 2
+    required_approving_review_count = 1
   }
 
   required_status_checks {
-    strict   = true
-    contexts = ["Markdown lint"]
+    strict = true
+    checks = each.value
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
+
